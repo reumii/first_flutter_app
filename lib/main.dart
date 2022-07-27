@@ -1,3 +1,5 @@
+import 'package:first_flutter_app/subDetail.dart';
+import 'package:first_flutter_app/thirdPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'sub/firstPage.dart';
@@ -12,10 +14,68 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  static const String _title = 'Widget Example';
+
   @override
   Widget build(BuildContext context){
     return MaterialApp(
-      home: LargeFileMain(),
+      title : _title,
+      theme: ThemeData(
+        brightness: Brightness.light,
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/',
+      routes:{'/' : (context)=> SubDetail(),
+          '/second' : (context)=> SecondPage(),
+          '/third' :(context)=> ThirdDetail()},
+    );
+  }
+}
+
+class FirstPage extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _FirstPage();
+}
+
+class _FirstPage extends State<FirstPage>{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('sub page main'),
+      ),
+      body: Container(
+        child: Center(
+          child: Text('첫 번째 페이지'),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.of(context).pushNamed('/second');
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class SecondPage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Second Page'),
+      ),
+      body: Container(
+        child: Center(
+          child: ElevatedButton(
+            onPressed: (){
+              Navigator.of(context).pop(); //지금 페이지 종료
+            },
+            child: Text('돌아가기'),
+          ),
+        ),
+      )
     );
   }
 }
