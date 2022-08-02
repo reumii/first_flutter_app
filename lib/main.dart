@@ -1,3 +1,4 @@
+import 'package:first_flutter_app/secondDetail.dart';
 import 'package:first_flutter_app/subDetail.dart';
 import 'package:first_flutter_app/thirdPage.dart';
 import 'package:flutter/material.dart';
@@ -8,26 +9,21 @@ import './animalItem.dart';
 import './cupertinoMain.dart';
 import 'largeFileMain.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  static const String _title = 'Widget Example';
-
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
-      title : _title,
+      title: 'Flutter Demo',
       theme: ThemeData(
-        brightness: Brightness.light,
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/',
-      routes:{'/' : (context)=> SubDetail(),
-          '/second' : (context)=> SecondPage(),
-          '/third' :(context)=> ThirdDetail()},
+      home: MyHomePage(),
     );
   }
 }
@@ -285,25 +281,74 @@ class _WidgetExampleState extends State<WidgetApp>{
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-  TabController? controller;
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      _counter++;
+      _setData(_counter);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(''),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            Text(
+              '$_counter'
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _setData(int value) async {
+    var key = "count";
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setInt(key, value);
+  }
+
+  void _loadData() async {
+    var key = "count";
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      var value = pref.getInt(key);
+      if (value == null) {
+        _counter = 0;
+      } else {
+        _counter = value;
+      }
+    });
+  }
+
+  /*TabController? controller;
   List<Animal> animalList = new List.empty(growable:true);
 
   @override
@@ -344,6 +389,5 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         Tab(icon: Icon(Icons.looks_two, color:Colors.blue),),
       ], controller: controller,
       )
-    );
-  }
+    );*/
 }
