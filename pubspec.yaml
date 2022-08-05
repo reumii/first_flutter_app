@@ -69,6 +69,7 @@ flutter:
     - repo/images/monkey.png
     - repo/images/pig.png
     - repo/images/wolf.png
+    - repo/fruit.txt
 
   # To add assets to your application, add an assets section, like this:
   # assets:
