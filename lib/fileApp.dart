@@ -10,11 +10,10 @@ class FileApp extends StatefulWidget{
 
 class _FileApp extends State<FileApp>{
   int _count = 0;
+  List<String> itemList = new List.empty(growable: true);
+  TextEditingController controller = new TextEditingController();
 
   Future<List<String>> readListFile() async {
-    List<String> itemList = new List.empty(growable: true);
-    TextEditingController controller = new TextEditingController();
-
     var key = 'first';
     SharedPreferences pref = await SharedPreferences.getInstance();
     bool? firstCheck = pref.getBool(key);
@@ -65,22 +64,48 @@ class _FileApp extends State<FileApp>{
       ),
       body: Container(
         child: Center(
-          child: Text(
-            '$_count',
-            style: TextStyle(fontSize: 40),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                controller:controller,
+                keyboardType:TextInputType.text,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (context,index){
+                    return Card(
+                      child:Center(
+                        child:Text(
+                          itemList[index],
+                          style:TextStyle(fontSize:30),
+                        ),
+                      ),
+                    );
+                  },
+                  itemCount : itemList.length
+                ),
+              ),
+            ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
+          writeFruit(controller.value.text);
           setState((){
-            _count++;
+            itemList.add(controller.value.text);
           });
-          writeCountFile(_count);
         },
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  void writeFruit(String fruit) async{
+    var dir = await getApplicationDocumentsDirectory();
+    var file = await File(dir.path + '/fruit.txt').readAsString();
+    file = file + '\n' + fruit;
+    File(dir.path + '\fruit.txt').writeAsStringSync(file);
   }
 
   void writeCountFile(int count) async{

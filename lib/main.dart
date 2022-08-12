@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FileApp(),
+      home: MyHomePage(),
     );
   }
 }
@@ -307,26 +307,21 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+        title: Text('로고 바꾸기'),
+        actions:<Widget>[
+          TextButton(
+            onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> LargeFileMain()));
+            },
+            child:Text(
+              '로고 바꾸기',
+              style: TextStyle(color : Colors.white),
             ),
-            Text(
-              '$_counter'
-            ),
-          ],
-        ),
+          ),
+
+        ]
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      body:Container(),
     );
   }
 
